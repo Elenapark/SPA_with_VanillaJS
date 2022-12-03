@@ -1,5 +1,6 @@
-export default function Suggestion({ $target, state, onSubmit }) {
+export default function Suggestion({ $target, state, onSubmit, onChangeIdx }) {
   this.$element = document.createElement("ul");
+  this.$element.setAttribute("tabindex", "0");
   this.$element.setAttribute("class", "Suggestion");
   $target.appendChild(this.$element);
 
@@ -13,35 +14,52 @@ export default function Suggestion({ $target, state, onSubmit }) {
   this.render = () => {
     const suggestionHtml = this.state.languages
       .map((lang, idx) => {
-        return `<li data-index=${idx}>${lang}</li>`;
+        return `<li data-index=${idx} class="${
+          idx === this.state.focusedItemIdx ? "Suggestion__item--selected" : ""
+        }">${lang}</li>`;
       })
       .join("");
     this.$element.innerHTML = suggestionHtml;
   };
+  this.render();
 
   this.$element.addEventListener("click", (e) => {
-    const clickedLang = e.target.closest("li").innerText;
+    const li = e.target.closest("li");
+    if (!li) return;
+
+    const clickedLang = li.innerText;
     e.target.classList.add("Suggestion__item--selected");
     onSubmit(clickedLang);
     e.target.classList.remove("Suggestion__item--selected");
   });
 
-  this.$element.addEventListener("keydown", (e) => {
-    const clickedLang = e.target.closest("li").innerText;
+  window.addEventListener("keydown", (e) => {
+    const suportedKey = ["ArrowUp", "ArrowDown", "Enter"];
+
+    if (!suportedKey.includes(e.key) || this.state.languages.length === 0) {
+      return;
+    }
 
     if (e.key === "ArrowUp") {
       console.log("up");
+      onChangeIdx(
+        this.state.focusedItemIdx - 1 < 0
+          ? this.state.languages.length - 1
+          : this.state.focusedItemIdx - 1
+      );
     }
     if (e.key === "ArrowDown") {
-      console.log("down");
+      console.log("before", this.state.focusedItemIdx);
+      onChangeIdx(
+        this.state.focusedItemIdx + 1 > this.state.languages.length - 1
+          ? 0
+          : this.state.focusedItemIdx + 1
+      );
+      console.log("after", this.state.focusedItemIdx);
     }
 
     if (e.key === "Enter") {
-      e.target.classList.add("Suggestion__item--selected");
-      onSubmit(clickedLang);
-      e.target.classList.remove("Suggestion__item--selected");
+      onSubmit(this.state.languages[this.state.focusedItemIdx]);
     }
   });
-
-  this.render();
 }
