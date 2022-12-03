@@ -19,12 +19,14 @@ export default function SelectedLangs({ $target, state }) {
   };
 
   this.render = () => {
-    const selectedLangsHtml = this.state.selectedLangs
-      .map((lang) => {
-        console.log(lang);
-        return `<li>${lang}</li>`;
-      })
-      .join("");
+    const selectedLangsHtml =
+      this.state.selectedLangs &&
+      this.state.selectedLangs
+        .map((lang) => {
+          console.log(lang);
+          return `<li>${lang}</li>`;
+        })
+        .join("");
     this.$element.innerHTML = selectedLangsHtml;
   };
 
