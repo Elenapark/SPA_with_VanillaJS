@@ -15,6 +15,8 @@ export default function SearchInput({ $target, state, onFetchLanguages }) {
 			<input type='text' class='SearchInput__input' placeholder="프로그램 언어를 입력하세요." />
 		`;
 
+    this.$element.querySelector("input").focus();
+
     this.$element.addEventListener("submit", (e) => {
       e.preventDefault();
     });
