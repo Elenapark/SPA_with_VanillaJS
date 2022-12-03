@@ -41,7 +41,6 @@ export default function Suggestion({ $target, state, onSubmit, onChangeIdx }) {
     }
 
     if (e.key === "ArrowUp") {
-      console.log("up");
       onChangeIdx(
         this.state.focusedItemIdx - 1 < 0
           ? this.state.languages.length - 1
@@ -49,13 +48,11 @@ export default function Suggestion({ $target, state, onSubmit, onChangeIdx }) {
       );
     }
     if (e.key === "ArrowDown") {
-      console.log("before", this.state.focusedItemIdx);
       onChangeIdx(
         this.state.focusedItemIdx + 1 > this.state.languages.length - 1
           ? 0
           : this.state.focusedItemIdx + 1
       );
-      console.log("after", this.state.focusedItemIdx);
     }
 
     if (e.key === "Enter") {

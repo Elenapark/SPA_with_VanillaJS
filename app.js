@@ -1,4 +1,5 @@
 import SearchInput from "./components/SearchInput.js";
+import SelectedLangs from "./components/SelectedLangs.js";
 import Suggestion from "./components/Suggestion.js";
 import { getLanguages } from "./service/language_service.js";
 
@@ -11,8 +12,14 @@ export default function App({ $target }) {
 
   this.setState = (newState) => {
     this.state = newState;
-    suggestion.setState(newState);
+    selected.setState(this.state);
+    suggestion.setState(this.state);
   };
+
+  const selected = new SelectedLangs({
+    $target,
+    state: this.state,
+  });
 
   new SearchInput({
     $target,
@@ -27,6 +34,10 @@ export default function App({ $target }) {
     state: this.state,
     onSubmit: (lang) => {
       if (!lang) return;
+      this.setState({
+        ...this.state,
+        selectedLangs: [...this.state.selectedLangs, lang],
+      });
       alert(lang);
     },
     onChangeIdx: (idx) => {
