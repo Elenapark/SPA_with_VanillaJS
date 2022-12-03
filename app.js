@@ -2,6 +2,7 @@ import SearchInput from "./components/SearchInput.js";
 import SelectedLangs from "./components/SelectedLangs.js";
 import Suggestion from "./components/Suggestion.js";
 import { getLanguages } from "./service/language_service.js";
+import { debounce } from "./utils/debounce.js";
 
 export default function App({ $target }) {
   this.state = {
@@ -23,10 +24,10 @@ export default function App({ $target }) {
 
   new SearchInput({
     $target,
-    onFetchLanguages: async (keyword) => {
+    onFetchLanguages: debounce(async (keyword) => {
       const languages = await getLanguages(keyword);
       this.setState({ ...this.state, languages, focusedItemIdx: 0 });
-    },
+    }, 300),
   });
 
   const suggestion = new Suggestion({
