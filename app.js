@@ -14,6 +14,7 @@ export default function App({ $target }) {
       alert(`저장된 데이터에 문제가 생겨 기본 데이터로 설정됩니다. ${err}`);
     }),
     focusedItemIdx: 0,
+    keyword: "",
   };
 
   this.setState = (newState) => {
@@ -31,7 +32,7 @@ export default function App({ $target }) {
     $target,
     onFetchLanguages: debounce(async (keyword) => {
       const languages = await getLanguages(keyword);
-      this.setState({ ...this.state, languages, focusedItemIdx: 0 });
+      this.setState({ ...this.state, languages, focusedItemIdx: 0, keyword });
     }, 300),
   });
 

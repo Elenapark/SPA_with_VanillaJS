@@ -23,7 +23,6 @@ export default function SelectedLangs({ $target, state }) {
       this.state.selectedLangs &&
       this.state.selectedLangs
         .map((lang) => {
-          console.log(lang);
           return `<li>${lang}</li>`;
         })
         .join("");

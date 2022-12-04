@@ -11,15 +11,29 @@ export default function Suggestion({ $target, state, onSubmit, onChangeIdx }) {
     this.render();
   };
 
+  this.displayMatchedLetter = (keyword, lang) => {
+    // console.log(keyword, lang);
+    if (!lang.includes(keyword)) {
+      return lang;
+    }
+
+    const matchedText = lang.match(new RegExp(keyword, "gi"))[0];
+    const replacedText = `<span class="Suggestion__item--matched">${matchedText}</span>`;
+
+    return lang.replace(new RegExp(matchedText, "gi"), replacedText);
+  };
+
   this.render = () => {
-    const suggestionHtml = this.state.languages
+    const { languages, focusedItemIdx, keyword } = this.state;
+    const suggestionHtml = languages
       .map((lang, idx) => {
         return `<li data-index=${idx} class="${
-          idx === this.state.focusedItemIdx ? "Suggestion__item--selected" : ""
-        }">${lang}</li>`;
+          idx === focusedItemIdx ? "Suggestion__item--selected" : ""
+        }">${this.displayMatchedLetter(keyword, lang)}</li>`;
       })
       .join("");
-    this.$element.innerHTML = suggestionHtml;
+    this.$element.innerHTML = languages.length > 0 ? suggestionHtml : "";
+    this.$element.style.display = languages.length > 0 ? "block" : "none";
   };
   this.render();
 
